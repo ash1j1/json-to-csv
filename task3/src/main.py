@@ -3,12 +3,23 @@
 import os
 import pandas as pd
 import time
+import csv
 
 def json_to_csv(json_file, csv_file):
             # Reads the JSON file and converts it Pandas DataFrames
             df = pd.read_json(json_file, lines=True, encoding='utf-8')
             # DataFrames to CSV file
             df.to_csv(csv_file, index=False)
+
+def csv_tail(csv_file):
+    with open(csv_file, 'r') as file:
+        reader = csv.reader(file)
+        data = list(reader)[-10:]
+        row_num = 0
+        for row in data:
+            print('Row ' + str(row_num + 1) + ':')
+            print(', '.join(row))
+            row_num = row_num + 1
 
 def monitor_json_dir(json_dir, csv_dir):
     watched_files = set()
@@ -22,7 +33,10 @@ def monitor_json_dir(json_dir, csv_dir):
                     try:
                         json_to_csv(json_file, csv_file)
                         watched_files.add(entry.name)
-                        print(f"Converted {entry.name} to CSV")
+                        str_rep = '*' * 20
+                        print(f"{str_rep} Converted {entry.name} to CSV {str_rep}")
+                        csv_tail(csv_file)
+                        print('')
                     except Exception as e:
                         print(f"Error converting {entry.name}: {str(e)}")
         time.sleep(20)
