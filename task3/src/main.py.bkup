@@ -4,18 +4,6 @@ import os
 import pandas as pd
 import time
 import csv
-import signal
-import sys
-import shutil
-
-def signal_SIGINT(SignalNumber, Frame):
-    print('\nMoving CSV files to /tmp dir to be cleared')
-    temp_dir = '/tmp/'
-    with os.scandir(csv_dir) as entries:
-        for entry in entries:
-            shutil.move(os.path.join(csv_dir, entry.name), os.path.join(temp_dir, entry.name))
-    print('Exiting')
-    sys.exit()
 
 def json_to_csv(json_file, csv_file):
             # Reads the JSON file and converts it Pandas DataFrames
@@ -30,7 +18,7 @@ def csv_tail(csv_file):
         row_num = 0
         for row in data:
             print('Row ' + str(row_num + 1) + ':')
-            print(', '.join(row))
+            print(row)
             row_num = row_num + 1
 
 def monitor_json_dir(json_dir, csv_dir):
@@ -61,7 +49,6 @@ if __name__ == "__main__":
 
     # Create output directory if it doesn't exist
     os.makedirs(csv_dir, exist_ok=True)
-    signal.signal(signal.SIGINT, signal_SIGINT)
 
     # Monitor the JSON directory for new JSON files to be converted
     monitor_json_dir(json_dir, csv_dir)
