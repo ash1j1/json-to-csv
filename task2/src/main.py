@@ -36,8 +36,5 @@ if __name__ == "__main__":
     # Create output directory if it doesn't exist
     os.makedirs(csv_dir, exist_ok=True)
 
-    # Convert existing JSON files
-    # json_to_csv(json_dir, csv_dir)
-
     # Monitor the JSON directory for new JSON files to be converted
     monitor_json_dir(json_dir, csv_dir)
